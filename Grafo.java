@@ -9,13 +9,11 @@ MARCEL BARRETO – 2288386-0
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
-import java.io.*;
 import java.util.*;
 
 public class Grafo {
 
-    private boolean adjMatrix[][];
+    private int adjMatrix[][];
     private LinkedList<Integer> adj[];
     private int numVertices;
     LinkedList<Integer> val[];
@@ -23,7 +21,7 @@ public class Grafo {
     // Construir matriz e Lista
     public Grafo(int numVertices) {
         this.numVertices = numVertices;
-        adjMatrix = new boolean[numVertices][numVertices];
+        adjMatrix = new int[numVertices][numVertices];
         adj = new LinkedList[numVertices];
         val = new LinkedList[adjMatrix.length];
         for (int i = 0; i < numVertices; ++i) {
@@ -36,10 +34,15 @@ public class Grafo {
 
     // Adicionar arestas
     public void addEdge(int i, int j) {
-        adjMatrix[i][j] = true;
-        adjMatrix[j][i] = true;
+        if(adjMatrix[i][j]>=1 && adjMatrix[j][i] >= 1){
+            adjMatrix[i][j] += 1;
+            adjMatrix[j][i] += 1;
+        }else{
+        adjMatrix[i][j] = 1;
+        adjMatrix[j][i] = 1;
         adj[i].add(j);
         adj[j].add(i);
+        }
     }
 
     // Mostrar matriz
@@ -57,9 +60,9 @@ public class Grafo {
             } else {
                 s.append(i + 1 + ": ");
             }
-            for (boolean j : adjMatrix[i]) {
+            for (int j : adjMatrix[i]) {
 
-                s.append((j ? 1 : 0) + " ");
+                s.append((j > 0 ? j : 0) + " ");
 
             }
             s.append("\n");
@@ -76,8 +79,8 @@ public class Grafo {
         for (int i = 0; i < adjMatrix.length; i++) {
             soma = 0;
             for (int j = 0; j < adjMatrix.length; j++) {
-                if (adjMatrix[i][j]) {
-                    soma++;
+                if (adjMatrix[i][j]>0) {
+                    soma += adjMatrix[i][j];
                 }
             }
             val[i].add(soma);
@@ -191,7 +194,7 @@ public class Grafo {
     public static void main(String args[]) throws IOException {
         //lendo o arquivo 
         Scanner a = new Scanner(System.in);
-        System.out.println("Digite o caminho até o arquivo .txt (exemplo: C:\\Users\\Brian\\Desktop/arquivo.txt): ");
+        System.out.println("Digite o caminho até o arquivo .txt (exemplo: C:\\Users\\T-Gamer\\Desktop/arquivo.txt): ");
         String path = a.next();
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
 
